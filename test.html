@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>双击测试</title>
+    <script src="js/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+</head>
+<body>
+    <h1>双击测试页面</h1>
+    <button id="testDoubleClick">测试双击事件</button>
+    <button id="testSelectPlanet">测试selectPlanet函数</button>
+    <div id="testInfoPanel" class="planet-info-panel" style="display:none;">测试信息面板</div>
+
+    <script>
+        // 引入solar-system.js中的相关函数
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('测试页面DOM加载完成');
+            // 检查是否加载了solar-system.js
+            if (typeof window.selectPlanet === 'function') {
+                console.log('solar-system.js已加载，selectPlanet函数可用');
+            } else {
+                console.log('solar-system.js未加载或selectPlanet函数不可用');
+                // 尝试动态加载solar-system.js
+                const script = document.createElement('script');
+                script.src = 'solar-system.js';
+                script.onload = function() {
+                    console.log('动态加载solar-system.js完成');
+                    if (typeof window.selectPlanet === 'function') {
+                        console.log('动态加载后，selectPlanet函数可用');
+                    } else {
+                        console.log('动态加载后，selectPlanet函数仍不可用');
+                    }
+                };
+                document.head.appendChild(script);
+            }
+
+            // 自动测试双击事件
+            setTimeout(function() {
+                console.log('自动测试双击事件');
+                const canvas = document.querySelector('canvas');
+                if (canvas) {
+                    const event = new MouseEvent('dblclick', {
+                        'view': window,
+                        'bubbles': true,
+                        'cancelable': true
+                    });
+                    canvas.dispatchEvent(event);
+                    console.log('已自动触发canvas的双击事件');
+                } else {
+                    console.log('未找到canvas元素，无法自动测试双击事件');
+                }
+            }, 2000);
+
+            // 自动测试selectPlanet函数
+            setTimeout(function() {
+                console.log('自动测试selectPlanet函数');
+                if (typeof window.selectPlanet === 'function') {
+                    console.log('找到selectPlanet函数，准备调用');
+                    const mockPlanet = new THREE.Object3D();
+                    mockPlanet.name = 'earth';
+                    const mockPlanetData = {
+                        name: '地球',
+                        diameter: 12742,
+                        distanceFromSun: 149600000,
+                        distanceFromEarth: 0
+                    };
+                    window.selectPlanet(mockPlanet, mockPlanetData);
+                    console.log('已调用selectPlanet函数');
+                } else {
+                    console.log('未找到selectPlanet函数，无法测试');
+                }
+            }, 3000);
+            // 模拟双击事件
+            document.getElementById('testDoubleClick').addEventListener('click', function() {
+                console.log('测试双击事件按钮被点击');
+                // 创建模拟事件
+                const event = new MouseEvent('dblclick', {
+                    'view': window,
+                    'bubbles': true,
+                    'cancelable': true
+                });
+                // 触发canvas上的双击事件
+                const canvas = document.querySelector('canvas');
+                if (canvas) {
+                    canvas.dispatchEvent(event);
+                    console.log('已触发canvas的双击事件');
+                } else {
+                    console.log('未找到canvas元素');
+                }
+            });
+
+            // 直接测试selectPlanet函数
+            document.getElementById('testSelectPlanet').addEventListener('click', function() {
+                console.log('测试selectPlanet函数按钮被点击');
+                // 检查window对象中是否有selectPlanet函数
+                if (window.selectPlanet) {
+                    console.log('找到selectPlanet函数');
+                    // 创建模拟数据
+                    const mockPlanet = new THREE.Object3D();
+                    mockPlanet.name = 'earth';
+                    const mockPlanetData = {
+                        name: '地球',
+                        diameter: 12742,
+                        distanceFromSun: 149600000,
+                        distanceFromEarth: 0
+                    };
+                    // 调用selectPlanet函数
+                    window.selectPlanet(mockPlanet, mockPlanetData);
+                    console.log('已调用selectPlanet函数');
+                } else {
+                    console.log('未找到selectPlanet函数');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
